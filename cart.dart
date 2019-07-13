@@ -9,7 +9,7 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
  Widget _getAll() {
    return StreamBuilder<QuerySnapshot>(
-     stream: Firestore.instance.collection('prods').snapshots(),
+     stream: Firestore.instance.collection('products').snapshots(),
      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
        return new ListView(children: getProduct(snapshot));
      },
@@ -18,8 +18,9 @@ class _CartState extends State<Cart> {
  getProduct(AsyncSnapshot<QuerySnapshot> snapshot) {
    return snapshot.data.documents
        .map((doc) => new ListTile(
-       title: new Text(doc["name"]),
-       subtitle: new Text(doc["price"].toString())))
+     leading: new Image.network(doc["Url"]),
+       title: new Text(doc["Name"]),
+       subtitle: new Text(doc["Price"].toString())))
        .toList();
   }
 
