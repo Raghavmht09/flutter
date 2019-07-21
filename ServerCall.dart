@@ -8,8 +8,7 @@ class MySong {
   String artistName;
   String trackName;
   String previewUrl;
-
-  MySong(this.trackName, this.artistName, this.previewUrl, songObj);
+  MySong(this.trackName, this.artistName, this.previewUrl);
 }
 
 class ServerCall extends StatefulWidget {
@@ -19,7 +18,6 @@ class ServerCall extends StatefulWidget {
 
 class _ServerCallState extends State<ServerCall> {
   List<MySong> songList = [];
-  bool isPLay= false;
 
   callServer() async {
     var result = await http
@@ -32,10 +30,10 @@ class _ServerCallState extends State<ServerCall> {
     for (int i = 0; i < arr.length; i++) {
       var songObj = arr[i];
       MySong song = new MySong(
-          songObj['trackName'], songObj['artistName'], songObj['previewUrl'], songObj['artworkUrl100']);
+          songObj['trackName'], songObj['artistName'], songObj['previewUrl']);
       songList2.add(song);
     }
-    print("Now SongList is ");
+    print("Now SOngList is ");
     for (int i = 0; i < songList2.length; i++) {
       print("Song is ${songList2[i].trackName}");
     }
@@ -43,131 +41,65 @@ class _ServerCallState extends State<ServerCall> {
       songList = songList2;
     });
   }
-  _playSong(index) async {
+
+  _playSong(index) async{
     AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.play(songList[index].previewUrl);
-
-
-    /*` if(isPLay) {
-
     await audioPlayer.play( songList[index].previewUrl);
-    isPLay=false;
-  }
-else(){
-       audioPlayer.stop();
-      isPLay=true;
-    };*/
-
   }
 
-  _stopSong( index) async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.stop();
-  }
-
-  _pauseSong(index) async{
-    AudioPlayer audioPlayer = AudioPlayer();
-    await audioPlayer.pause();
-
-  }
-
-    @override
+  @override
   Widget build(BuildContext context) {
     callServer();
     return Container(
-      child:
-      ListView.builder(
+              child: ListView.builder(
                   itemCount: songList.length,
                   itemBuilder: (context, index) {
 
-//                    return Card(
-//                      color: Colors.grey,
-//                      elevation: 50,
-//                      clipBehavior: Clip.hardEdge,
-                      child:return Row(
-                        children: <Widget>[
+                    return Card(
+                      elevation: 20,
+                       color: Colors.blue,
 
 
-                          Expanded(
-                            child: ListTile(
-                              leading: CircleAvatar( maxRadius: 40,
-                                child: Container(
-                                  child: Image(image: songList[index].artworkUrl100),
-                                ),
-                              ),
-                              title: Text(
-                                songList[index].trackName,
-                                style: TextStyle(fontSize: 25,color: Colors.black,fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(songList[index].artistName,style: TextStyle(fontStyle: FontStyle.italic))
-                            ),
-                            flex: 7,
+                       child: ListTile(
+                          title: Text(
+                            songList[index].trackName,
+                            style: TextStyle(fontSize: 40,color: Colors.black),
                           ),
+                       subtitle: Text(songList[index].artistName),
+
+
+                       /*   trailing: Row(
+                          children: <Widget>[
+
+                          IconButton(
+                            icon: Icon(Icons.play_arrow),
+                    padding: EdgeInsets.all(10.0),
+                    onPressed: () {
+                    _playSong(index);
+                    },
+
+                    ),
+
+                       IconButton(
+                         icon:Icon(Icons.stop),
+                         padding: EdgeInsets.all(10.0),
+                         onPressed: (){
+
+                         },
+                       )   ],
+                    ),*/
+
+                        )
 
 
 
-                                Expanded(
-                                  child: IconButton(
-                                  icon: Icon(Icons.play_arrow),
-                                  padding: EdgeInsets.all(10.0),
-                                  onPressed: () {
-                                    _playSong(index);
-                                  },
-
-                              ),
-                                  flex: 1,
-                                ),
-
-                          Expanded(
-                            child: IconButton(
-                              icon: Icon(Icons.stop),
-                              padding: EdgeInsets.all(10.0),
-                              onPressed: () {
-                                _stopSong(index);
-                              },
-
-                            ),
-                            flex: 1,
-                          ),
-
-                         Expanded(
-                            child: IconButton(
-                              icon: Icon(Icons.pause),
-                              padding: EdgeInsets.all(10.0),
-                              onPressed: () {
-                                _pauseSong(index);
-                              },
-
-                            ),
-                            flex: 1,
-                          ),
-
-
-
-
-
-                          ]
-                         );
-
-
-
-
-                  }),
-            );
-
-
-
+                      ],
+                    );
+                  })
+          );
 
 
 
 
   }
-
-
-
-
-
-
-
-
 }
